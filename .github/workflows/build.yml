@@ -51,8 +51,7 @@ jobs:
           chmod +x gradlew
           ./gradlew make makePluginsJson || true
           cp -f **/build/*.cs3 $GITHUB_WORKSPACE/builds/ 2>/dev/null || true
-          cp -f build/plugins.json $GITHUB_WORKSPACE/builds/ 2>/dev/null || true
-          # Linkleri GitHub Pages formatına dönüştür:
+          find . -name "plugins.json" -exec cp -f {} $GITHUB_WORKSPACE/builds/ \;
           sed -i 's|raw.githubusercontent.com/cevherneciponat-design/TestPlugins/builds|cevherneciponat-design.github.io/TestPlugins|g' $GITHUB_WORKSPACE/builds/plugins.json
 
       - name: Push builds
@@ -62,5 +61,5 @@ jobs:
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
           git add .
-          git commit -m "Build with Korkuyorum Anne provider - $GITHUB_SHA" || true
+          git commit -m "Build $GITHUB_SHA" || true
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:builds --force || true
