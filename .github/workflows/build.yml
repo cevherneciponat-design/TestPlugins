@@ -47,9 +47,36 @@ jobs:
           mkdir -p $GITHUB_WORKSPACE/builds
           cd $GITHUB_WORKSPACE/src
           chmod +x gradlew
-          ./gradlew make makePluginsJson || true
+          ./gradlew make || true
           cp -f **/build/*.cs3 $GITHUB_WORKSPACE/builds/ 2>/dev/null || true
-          cp -f build/plugins.json $GITHUB_WORKSPACE/builds/ 2>/dev/null || true
+
+      - name: Generate CloudStream Manifests
+        run: |
+          cd $GITHUB_WORKSPACE/builds
+          
+          # Manifest/plugins.json dosyasını standart CloudStream formatında oluştur
+          cat << 'EOF' > plugins.json
+          [
+            {
+              "name": "ExampleProvider",
+              "pluginUrl": "https://raw.githubusercontent.com/cevherneciponat-design/TestPlugins/builds/ExampleProvider.cs3",
+              "version": 1,
+              "url": "https://raw.githubusercontent.com/cevherneciponat-design/TestPlugins/builds/ExampleProvider.cs3",
+              "manifestVersion": 1,
+              "authors": ["cevherneciponat-design"],
+              "status": 1,
+              "tvTypes": ["Movie"]
+            }
+          ]
+          EOF
+
+          # repo.json dosyasını oluştur
+          cat << 'EOF' > repo.json
+          {
+            "name": "TestPlugins",
+            "pluginUrl": "https://raw.githubusercontent.com/cevherneciponat-design/TestPlugins/builds/plugins.json"
+          }
+          EOF
 
       - name: Push builds
         run: |
