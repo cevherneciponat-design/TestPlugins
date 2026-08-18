@@ -57,12 +57,10 @@ class ExampleProvider : MainAPI() {
             val videoUrl = "$mainUrl/download/$id/${file.name}"
 
             offsetCallback(
-                ExtractorLink(
+                newExtractorLink(
                     source = name,
                     name = file.name ?: "MP4 Video",
-                    url = videoUrl,
-                    referer = "$mainUrl/",
-                    quality = Qualities.Unknown.value
+                    url = videoUrl
                 )
             )
         }
