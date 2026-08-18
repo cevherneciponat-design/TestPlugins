@@ -1,5 +1,3 @@
-package com.example
-
 import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.utils.*
 
@@ -10,7 +8,6 @@ class ExampleProvider : MainAPI() {
     override var lang = "en"
     override val hasMainPage = true
 
-    // Arama fonksiyonu: Sitede kelime aratıldığında çalışır
     override suspend fun search(query: String): List<SearchResponse> {
         val searchUrl = "$mainUrl/advancedsearch.php?q=$query+AND+mediatype%3Adownloads&fl[]=identifier,title&sort[]=&sort[]=&sort[]=&rows=50&page=1&output=json"
 
@@ -26,7 +23,6 @@ class ExampleProvider : MainAPI() {
         } ?: emptyList()
     }
 
-    // Detay sayfası fonksiyonu: Bir filme tıklandığında çalışır
     override suspend fun load(url: String): LoadResponse {
         val id = url.substringAfter("/details/")
         val metaUrl = "$mainUrl/metadata/$id"
@@ -41,26 +37,26 @@ class ExampleProvider : MainAPI() {
         }
     }
 
-    // Oynatma bağlantısı fonksiyonu: Video oynatılmak istendiğinde MP4 linkini çözer
     override suspend fun loadLinks(
         data: String,
         isCasting: Boolean,
         subtitleCallback: (SubtitleFile) -> Unit,
-        offsetCallback: (ExtractorLink) -> Unit
+        callback: (ExtractorLink) -> Unit
     ): Boolean {
-        val id = data
-        val filesUrl = "$mainUrl/metadata/$id/files"
+        val filesUrl = "$mainUrl/metadata/$data/files"
 
         val response = app.get(filesUrl).parsedSafe<ArchiveFilesResponse>()
 
         response?.result?.filter { it.name?.endsWith(".mp4") == true }?.forEach { file ->
-            val videoUrl = "$mainUrl/download/$id/${file.name}"
+            val videoUrl = "$mainUrl/download/$data/${file.name}"
+            val fileName = file.name ?: "MP4 Video"
 
-            offsetCallback(
+            callback(
                 newExtractorLink(
                     source = name,
-                    name = file.name ?: "MP4 Video",
-                    url = videoUrl
+                    name = fileName,
+                    url = videoUrl,
+                    type = ExtractorLinkType.VIDEO
                 )
             )
         }
