@@ -1,9 +1,9 @@
 [
   {
     "name": "ExampleProvider",
-    "pluginUrl": "https://raw.githubusercontent.com/cevherneciponat-design/TestPlugins/builds/ExampleProvider.cs3",
+    "pluginUrl": "https://cevherneciponat-design.github.io/TestPlugins/ExampleProvider.cs3",
     "version": 1,
-    "url": "https://raw.githubusercontent.com/cevherneciponat-design/TestPlugins/builds/ExampleProvider.cs3",
+    "url": "https://cevherneciponat-design.github.io/TestPlugins/ExampleProvider.cs3",
     "manifestVersion": 1,
     "authors": ["cevherneciponat-design"],
     "status": 1,
