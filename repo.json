@@ -1,1 +1,4 @@
-{"name":"TestPlugins","pluginUrl":"https://raw.githubusercontent.com/cevherneciponat-design/TestPlugins/builds/plugins.json"}
+{
+  "name": "TestPlugins",
+  "pluginUrl": "https://raw.githubusercontent.com/cevherneciponat-design/TestPlugins/builds/plugins.json"
+}
