@@ -7,12 +7,12 @@ class ExampleProvider : MainAPI() {
     override var mainUrl = "https://archive.org"
     override var name = "Internet Archive Movies"
     override var supportedTypes = setOf(TvType.Movie)
-    override var lang = "tr"
+    override var lang = "en"
     override val hasMainPage = true
 
     // Arama fonksiyonu: Sitede kelime aratıldığında çalışır
     override suspend fun search(query: String): List<SearchResponse> {
-        val searchUrl = "$mainUrl/advancedsearch.php?q=$query+AND+mediatype%3Adownloads&fl[]=identifier,title,description&sort[]=&sort[]=&sort[]=&rows=20&page=1&output=json"
+        val searchUrl = "$mainUrl/advancedsearch.php?q=$query+AND+mediatype%3Adownloads&fl[]=identifier,title&sort[]=&sort[]=&sort[]=&rows=50&page=1&output=json"
 
         val response = app.get(searchUrl).parsedSafe<ArchiveSearchResponse>()
 
@@ -20,7 +20,7 @@ class ExampleProvider : MainAPI() {
             val title = doc.title ?: return@mapNotNull null
             val id = doc.identifier ?: return@mapNotNull null
 
-            newMovieSearchResponse(title, "$mainUrl/details/$id", TvType.Movie) {
+            newMovieSearchResponse(name = title, url = "$mainUrl/details/$id", type = TvType.Movie) {
                 this.posterUrl = "$mainUrl/services/img/$id"
             }
         } ?: emptyList()
@@ -35,7 +35,7 @@ class ExampleProvider : MainAPI() {
         val title = response?.metadata?.title ?: "Bilinmeyen Film"
         val description = response?.metadata?.description ?: ""
 
-        return newMovieLoadResponse(title, url, TvType.Movie, id) {
+        return newMovieLoadResponse(name = title, url = url, type = TvType.Movie, dataUrl = id) {
             this.posterUrl = "$mainUrl/services/img/$id"
             this.plot = description
         }
