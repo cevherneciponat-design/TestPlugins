@@ -1,4 +1,11 @@
-version = 1
+
+
+plugins {
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
+}
+
+val version = 1
 
 cloudstream {
     description = "Internet Archive Movies Provider"
